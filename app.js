@@ -4,7 +4,7 @@ const app = express();
 const dotenv = require('dotenv').config();
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const Sauce = require('./models/Sauce');
+const sauceModel = require('./models/Sauce');
 const user = require('./models/User');
 
 
@@ -34,9 +34,26 @@ app.post('/api/sauces', (req, res, next) => {
     .catch(error => res.status(400).json({ error }));
 });
 
+app.put('/api/sauces/:id', (req, res, next) => {
+  sauceModel.updateOne({ id: req.params.id }, { ...req.body, id: req.params.id })
+    .then(() => res.status(200).json({ message: 'Objet modifié !'}))
+    .catch(error => res.status(400).json({ error }));
+});
 
-app.use('/api/sauces', (req, res, next) => {
-    Sauce.find()
+app.delete('/api/sauces/:id', (req, res, next) => {
+  sauceModel.deleteOne({ id: req.params.id })
+    .then(() => res.status(200).json({ message: 'Objet supprimé !'}))
+    .catch(error => res.status(400).json({ error }));
+});
+
+app.get('/api/sauces/:id', (req, res, next) => {
+  sauceModel.findOne({ id: req.params.id })
+    .then(sauces => res.status(200).json(sauces))
+    .catch(error => res.status(404).json({ error }));
+});
+
+app.get('/api/sauces', (req, res, next) => {
+    sauceModel.find()
         .then(sauces => res.status(200).json(sauces))
         .catch(error => res.status(400).json({ error }));
 });
