@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
-const Sauce = require('../models/Sauce');
+
 const User = require('../models/User');
 
 //enregistrement des nouveaux utilisateurs dans BDD

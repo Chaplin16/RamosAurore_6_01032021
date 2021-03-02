@@ -9,8 +9,8 @@ const userRoutes = require('./routes/user');
 
 const user = require('./models/User');
 
-
-mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.jy1jc.mongodb.net/${process.env.DB_DATABASE}?retryWrites=true&w=majority`,
+// 
+mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.vqzqi.mongodb.net/${process.env.DB_DATABASE}?retryWrites=true&w=majority`,
 {   useNewUrlParser: true,
     useUnifiedTopology: true })
         .then(() => console.log('Connexion à MongoDB réussie!!AU TOP!!!!'))
@@ -27,8 +27,9 @@ app.use((req, res, next) => {
 
 app.use(bodyParser.json());
 
-app.use('/image', express.static(path.join(__dirname, 'images')) );
+app.use('/images', express.static(path.join(__dirname, 'image')));
 
 app.use('/api/sauces', sauceRoutes);
 app.use('/api/auth', userRoutes);
+
 module.exports = app;
