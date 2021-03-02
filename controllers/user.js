@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt');
+const jsonwebtoken = require('jsonwebtoken');
+const Sauce = require('../models/Sauce');
 const User = require('../models/User');
 
 //enregistrement des nouveaux utilisateurs dans BDD
@@ -33,7 +35,11 @@ exports.login = (req, res, next) => {
                     }
                     res.status(200).json({
                         userId: user._id,
-                        token: 'TOKEN'
+                        token: jsonwebtoken.sign(
+                            { userId: user._id },
+                            'RANDOM_TOKEN_SECRET',
+                            { expiresIn: '24h' }
+                        )
                     });
                 })
                 .catch(error => res.status(500).json({ error }));
