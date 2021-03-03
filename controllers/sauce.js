@@ -5,7 +5,7 @@ exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
     const sauce = new Sauce({
-        ...sauceObject,
+        ...sauceObject, //pour faire une copie de ts les elements envoyes du front end
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
     });
     sauce.save()
@@ -49,15 +49,27 @@ exports.getAllSauces = (req, res, next) => {
 };
 
 exports.likeSauce = (req, res, next) => {
-    const likesNumber = req.body.likes;
-    const dislikesNumber = req.body.dislikes;
+    const likes = req.body.likes;
+    const dislikes = req.body.dislikes;
+    const userId = req.body.userId;
+    const usersLiked = req.body.usersLiked;
+    const usersDisliked= req.body.usersDisliked;
 
-    Sauce.find({ _id: req.params.id })
+    Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
-            //likes +1
-            //dislikes -1
-            //utiliser case et break
-            //attention on ne peut pas liker 2 fois une sauce par meme user
+            //utiliser switch et case
+// si le user like on ajoute de 1 le like
+            if(sauce.usersLiked) {
+                Sauce.updateOne({ _id: req.params.id }, {likes: +1})  
+                    .then(() => res.status(201).json({message: 'sauce appréciée'})) 
+                    .catch(error => res.status(400).json({ error }));     
+            }
+//si le user dislike on enleve 1 aux likes
+            if(sauce.usersDisliked) {
+                Sauce.updateOne({ _id: req.params.id }, {likes: -1})  
+                    .then(() => res.status(201).json({message: 'sauce non aimée'})) 
+                    .catch(error => res.status(400).json({ error }));     
+            }
         })
         .catch(error => res.status(500).json({ error }));
 }
