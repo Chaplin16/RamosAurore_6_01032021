@@ -48,3 +48,17 @@ exports.getAllSauces = (req, res, next) => {
         .catch(error => res.status(400).json({ error }));
 };
 
+exports.likeSauce = (req, res, next) => {
+    const likesNumber = req.body.likes;
+    const dislikesNumber = req.body.dislikes;
+
+    Sauce.find({ _id: req.params.id })
+        .then(sauce => {
+            //likes +1
+            //dislikes -1
+            //utiliser case et break
+            //attention on ne peut pas liker 2 fois une sauce par meme user
+        })
+        .catch(error => res.status(500).json({ error }));
+}
+
