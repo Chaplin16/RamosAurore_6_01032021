@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
       //on trouve le numero du token par son emplacement
     const token = req.headers.authorization.split(' ')[1];
     //on le decode
-    const decodedToken = jsonwebtoken.verify(token, 'RANDOM_TOKEN_SECRET');
+    const decodedToken = jsonwebtoken.verify(token, `${process.env.TOP_SECRET}`);
     //on en fait un objet JS
     const userId = decodedToken.userId;
     //on verifie userId avec celui de la requete

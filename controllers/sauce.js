@@ -66,7 +66,7 @@ exports.likeSauce = (req, res, next) => {
             }
 //si le user dislike on enleve 1 aux likes
             if(sauce.usersDisliked) {
-                Sauce.updateOne({ _id: req.params.id }, {likes: -1})  
+                Sauce.updateOne({ _id: req.params.id }, {dislikes: +1})  
                     .then(() => res.status(201).json({message: 'sauce non aimée'})) 
                     .catch(error => res.status(400).json({ error }));     
             }
