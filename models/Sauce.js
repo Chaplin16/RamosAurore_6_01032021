@@ -12,25 +12,45 @@ const sauceSchema = mongoose.Schema({ // on utilise la méthode Schema de Mongoo
     required: true, 
     minlength:[5,"pas moins de 5 caratères"], 
     maxlengt: [30, "pas plus de 30 caractères"], 
-    match: [/^[^@&"<>!_$*€£`+=\/;?#]+$/, "pas de caractère spéciaux"],
+    validate: {
+        validator: function(value) {
+        return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
+        },
+        message: "N'entrez que des lettres et des chiffres, svp"
+    }  
   },   
   manufacturer: { 
     type: String, 
     minlength:[5,"pas moins de 5 caratères"], 
     maxlengt: [50, "pas plus de 50 caractères"], 
-    match: /^[^@&"<>!_$*€£`+=\/;?#]+$/
+    validate: {
+      validator: function(value) {
+      return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
+      },
+      message: "N'entrez que des lettres et des chiffres, svp"
+  } 
   },
   description: { 
     type: String,
     minlength:[15,"pas moins de 15 caratères"], 
     maxlengt: [100, "pas plus de 100 caractères"],  
-    match: /^[^@"<>!_$*€£`\/?#]+$/ 
+    validate: {
+      validator: function(value) {
+      return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
+      },
+      message: "N'entrez que des lettres et des chiffres, svp"
+  } 
   },
   mainPepper: { 
     type: String, 
     minlength:[5,"pas moins de 5 caratères"], 
     maxlengt: [30, "pas plus de 30 caractères"], 
-    match: /^[^@"<>!_$*€£`\/?#]+$/ 
+    validate: {
+      validator: function(value) {
+      return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
+      },
+      message: "N'entrez que des lettres et des chiffres, svp"
+  } 
   },
   heat: { type: Number },
   imageUrl: { type: String},
