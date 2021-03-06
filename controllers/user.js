@@ -1,11 +1,17 @@
 const bcrypt = require('bcrypt');
 const jsonwebtoken = require('jsonwebtoken');
-
+const cryptoJs = require('crypto-js');
 const User = require('../models/User');
 
+
 //enregistrement des nouveaux utilisateurs dans BDD
-//hachage du mot de passe
+//regex et hachage du mot de passe
 exports.signup = (req, res, next) => {
+    const regex = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6, }$/
+    if (!regex.test(req.body.password)) {
+        res.status(401).json({ error: "Le mot de passe doit contenir au minimum 6 caractères dont au moins une majuscule, une minuscule, un chiffre et un caractère special!" })
+        return false
+    }
     bcrypt.hash(req.body.password, 10)
         .then(hash => {
             const user = new User({
