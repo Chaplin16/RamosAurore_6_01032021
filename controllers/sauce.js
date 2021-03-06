@@ -1,6 +1,7 @@
 const Sauce = require('../models/Sauce');
 const firesystem = require('fs');
 
+
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
     delete sauceObject._id;
@@ -60,7 +61,7 @@ exports.likeSauce = (req, res, next) => {
             //utiliser switch et case
 // si le user like on ajoute de 1 le like
             if(sauce.usersLiked) {
-                Sauce.updateOne({ _id: req.params.id }, {likes: +1})  
+                Sauce.updateOne({ _id: req.params.id }, {likes: +1}, { usersLiked: userId }, { usersDisliked: userId })  
                     .then(() => res.status(201).json({message: 'sauce appréciée'})) 
                     .catch(error => res.status(400).json({ error }));     
             }
