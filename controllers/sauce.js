@@ -50,28 +50,37 @@ exports.getAllSauces = (req, res, next) => {
 };
 
 exports.likeSauce = (req, res, next) => {
-    const likes = req.body.likes;
-    const dislikes = req.body.dislikes;
+    const likes = req.body.like;
+    const dislikes = req.body.dislike;
     const userId = req.body.userId;
     const usersLiked = req.body.usersLiked;
     const usersDisliked= req.body.usersDisliked;
 
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
-            //utiliser switch et case
-// si le user like on ajoute de 1 le like
-            if(sauce.usersLiked) {
-                Sauce.updateOne({ _id: req.params.id }, {likes: +1}, { usersLiked: userId }, { usersDisliked: userId })  
-                    .then(() => res.status(201).json({message: 'sauce appréciée'})) 
-                    .catch(error => res.status(400).json({ error }));     
-            }
-//si le user dislike on enleve 1 aux likes
-            if(sauce.usersDisliked) {
-                Sauce.updateOne({ _id: req.params.id }, {dislikes: +1})  
-                    .then(() => res.status(201).json({message: 'sauce non aimée'})) 
-                    .catch(error => res.status(400).json({ error }));     
-            }
-        })
-        .catch(error => res.status(500).json({ error }));
+
+            switch(likes){
+            case 1 : // l'utilisateur like la sauce
+                Sauce.updateOne(
+                    { _id: req.params.id },
+                    {$push: {userLiked: userId}, $inc: {like: +1}}
+                )
+            
+            .then(() => res.status(200).json({ message: 'Délicieuse sauce! Très bon choix'}))
+            .catch(error => res.status(400).json({ error }));
+            break;
+
+            case -1 : // l'utilisateur dislike la sauce
+                Sauce.updateOne(
+                    { _id: req.params.id },
+                    {$push: {userDisliked: userId}, $inc: {dislikes: +1}}
+                )
+            
+            .then(() => res.status(200).json({ message: "Vous n'aimez pas cette sauce! "}))
+            .catch(error => res.status(400).json({ error }));
+            
+            break;
+        }}
+    )
 }
 
