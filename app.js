@@ -9,7 +9,7 @@ const sauceRoutes = require('./routes/sauce');
 const userRoutes = require('./routes/user');
 
 //securite
-//pour definir les variavles d environnement 
+//pour definir les variables d environnement 
 require('dotenv').config();
 
 // definit les entetes HTTP
@@ -18,17 +18,16 @@ const helmet = require('helmet');
 // desinfecte les donnees fournies par l utilisateur
 const mongoSanitize = require('express-mongo-sanitize');
 
-//
+// pour limiter le nombre de tentatives d identifications
+
 const rateLimit = require("express-rate-limit");
 
-// options de securité des cookies
-const cookieSession = require('cookie-session'); 
 
 //connection à la BDD
-mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.y0gkn.mongodb.net/${process.env.DB_LINK}`,
+mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.y0gkn.mongodb.net/${process.env.DB_LINK}`,
 {   useNewUrlParser: true,
-  useUnifiedTopology: true,
-  useCreateIndex: true
+    useUnifiedTopology: true,
+    useCreateIndex: true
 })
 .then(() => console.log('Connexion à MongoDB réussie!!AU TOP!!!!'))
 .catch(() => console.log('Connexion à MongoDB échouée et ZUT DE REZUT!!!'));
@@ -55,8 +54,8 @@ app.use(helmet());
 
 // por toutes les requetes
 const limiter = rateLimit({
-  windowMs: 20 * 60 * 1000, // 20 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  windowMs: 60 * 1000, // 1 minute
+  max: 3 // limit each IP to 3 requests per windowMs
 });
 app.use(limiter);
 
@@ -66,18 +65,22 @@ app.use(mongoSanitize({
 }))
 
 
-// cookie-session pour definir les options de securité des cookies
-var expiryDate = new Date( Date.now() + 60 * 60 * 1000 ); // 1 hour
-app.use(cookieSession({
-  name: 'session',
-  keys: ['key1', 'key2'],
-  cookie: { secure: true, //garantie envoi des cookies que par HTTPS
-            httpOnly: true, //garantie que les cookies sont envoyes qu en HTTPS et non au JS du client , contre les attaques croos-site-scripting
-            domain: 'example.com', //indique le domaine du cookie 
-            path: 'foo/bar', //indique le chemin du cookie
-            expires: expiryDate 
-          }
-  })
-);
+
+// //options de securité des cookies
+// const cookieSession = require('cookie-session'); 
+
+// // cookie-session pour definir les options de securité des cookies
+// var expiryDate = new Date( Date.now() + 60 * 60 * 1000 ); // 1 hour
+// app.use(cookieSession({
+//   name: 'session',
+//   keys: ['key1', 'key2'],
+//   cookie: { secure: true, //garantie envoi des cookies que par HTTPS
+//             httpOnly: true, //garantie que les cookies sont envoyes qu en HTTPS et non au JS du client , contre les attaques croos-site-scripting
+//             domain: 'example.com', //indique le domaine du cookie 
+//             path: 'foo/bar', //indique le chemin du cookie
+//             expires: expiryDate 
+//           }
+//   })
+// );
 
 module.exports = app;
