@@ -1,6 +1,6 @@
-const bcrypt = require('bcrypt');
-const jsonwebtoken = require('jsonwebtoken');
-const maskData = require('maskdata');
+const bcrypt = require('bcrypt'); 
+const jsonwebtoken = require('jsonwebtoken'); //creation de token et verification
+const maskData = require('maskdata'); //masque email dans BDD
 const passwordValidator = require('password-validator');
 const User = require('../models/User');
 
@@ -19,11 +19,11 @@ schema
 //regex et hachage du mot de passe
 exports.signup = (req, res, next) => {
     if(!schema.validate(req.body.password)) {
-        throw {error:'le mdp doit contenir au moins 8 caractères dont 1chiffre, 1 lettre majuscule et 1 minuscule'}
+        throw {error:'le mot de passe doit contenir au moins 8 caractères dont 1chiffre, 1 lettre majuscule et 1 minuscule'}
     }else {
-        bcrypt.hash(req.body.password, 10)
+        bcrypt.hash(req.body.password, 10) //hash le mot de passe, on execute 10 fois l algorithme de hachage
             .then(hash => {
-                const user = new User({
+                const user = new User({ //on recupere le hash du MDP et on le met ds un objet pour l enregistrer dans la BDD
                     email: maskData.maskEmail2(req.body.email),
                     password: hash
                 });
@@ -38,7 +38,7 @@ exports.signup = (req, res, next) => {
 
 // connections des utilisateurs deja existants
 exports.login = (req, res, next) => {
-    User.findOne({ email: maskData.maskEmail2(req.body.email)})
+    User.findOne({ email: maskData.maskEmail2(req.body.email)}) //on trouve le user ds la BDD qui correspond à ladresse email qui est rentré par l utilisateur de l application
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: "Il n y a pas d'utilisateur avec ce mail!" });
@@ -50,17 +50,17 @@ exports.login = (req, res, next) => {
                 return false
             }  
         
-            bcrypt.compare(req.body.password, user.password)
+            bcrypt.compare(req.body.password, user.password) // on compare le mdp qui est envoye dans la requete avec le mdp hashé qui est dans la BDD,
                 .then(valid => {
                     if (!valid) {
                         return res.status(401).json({ error: 'Mot de passe incorrect !' });
                     }
                     res.status(200).json({
                         userId: user._id,
-                        token: jsonwebtoken.sign(
-                            { userId: user._id },
-                            `${process.env.TOP_SECRET}`,
-                            { expiresIn: '24h' }
+                        token: jsonwebtoken.sign( //fonction sign prend en argument
+                            { userId: user._id }, //1 argument : les données que l on veut encoder à l int de ce token  /  user id etant l identifiant de la requete 
+                            `${process.env.TOP_SECRET}`, // 2ieme argument : clef secrete de l encodage 
+                            { expiresIn: '24h' } // chq TOKEN dure 24h 
                         )
                     });
                 })

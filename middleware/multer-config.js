@@ -1,21 +1,20 @@
 const multer = require('multer');
 
-//ce sont les extensions possibles des fichiers images
+//extensions possibles des fichiers images
 const MIME_TYPES = {
   'image/jpg': 'jpg',
   'image/jpeg': 'jpg',
   'image/png': 'png'
 };
 
-//creation d un objet de configuration pour multer qui s enregistrera sur le disque 
-const storage = multer.diskStorage({
-    destination: (req, file, callback) => {
+//creation d un objet de configuration 
+const storage = multer.diskStorage({ //methode qui enregistre sur le disque 
+    destination: (req, file, callback) => { //emplacement où enregistrer fichier
         callback(null, 'images');
     },
-    //creation du nouveau nom de fichier d image pour multer
-    filename: (req, file, callback) => {
+    filename: (req, file, callback) => { //creation du nouveau nom de fichier d image pour multer
         const name = file.originalname.split(' ').join('_'); //on enleve les espaces
-        const extension = MIME_TYPES[file.mimetype];//extension du fichier
+        const extension = MIME_TYPES[file.mimetype];
         callback(null, name + Date.now() + '.' + extension);//nom de fichier suffisamment unique
   }
 });

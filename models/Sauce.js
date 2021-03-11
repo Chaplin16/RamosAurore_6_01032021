@@ -10,7 +10,7 @@ const sauceSchema = mongoose.Schema({ // on utilise la méthode Schema de Mongoo
         type: String,
         required: true,
         minlength: [5, "pas moins de 5 caratères"],
-        maxlengt: [30, "pas plus de 30 caractères"],
+        maxlength: [30, "pas plus de 30 caractères"],
         validate: {
             validator: function(value){
                 return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
@@ -21,7 +21,7 @@ const sauceSchema = mongoose.Schema({ // on utilise la méthode Schema de Mongoo
     manufacturer: {
         type: String,
         minlength: [5, "pas moins de 5 caratères"],
-        maxlengt: [50, "pas plus de 50 caractères"],
+        maxlength: [50, "pas plus de 50 caractères"],
         validate: {
             validator: function(value){
                 return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
@@ -32,7 +32,7 @@ const sauceSchema = mongoose.Schema({ // on utilise la méthode Schema de Mongoo
     description: {
         type: String,
         minlength: [15, "pas moins de 15 caratères"],
-        maxlengt: [100, "pas plus de 100 caractères"],
+        maxlength: [100, "pas plus de 100 caractères"],
         validate: {
             validator: function(value){
                 return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
@@ -43,7 +43,7 @@ const sauceSchema = mongoose.Schema({ // on utilise la méthode Schema de Mongoo
     mainPepper: {
         type: String,
         minlength: [5, "pas moins de 5 caratères"],
-        maxlengt: [30, "pas plus de 30 caractères"],
+        maxlength: [30, "pas plus de 30 caractères"],
         validate: {
             validator: function(value){
                 return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);

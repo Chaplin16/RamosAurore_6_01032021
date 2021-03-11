@@ -24,9 +24,9 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS
 
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Origin', '*'); // * = tout le monde peut acceder à l api 
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS'); //methode acceptées
   next();
 });
 
@@ -52,7 +52,7 @@ app.use(mongoSanitize({
   replaceWith: '_'
 }))
 
-module.exports = app;
+module.exports = app; //devient accessible pour les autres fichiers
 
 
 // //options de securité des cookies
