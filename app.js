@@ -1,27 +1,17 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
- 
-const path = require('path');
+const app = express();
+const path = require('path'); //donne acces au chemin de notre systeme de fichier
 
-//routes
-const sauceRoutes = require('./routes/sauce');
+// importation des routes
+const sauceRoutes = require('./routes/sauce'); 
 const userRoutes = require('./routes/user');
 
-//securite
-//pour definir les variables d environnement 
-require('dotenv').config();
-
-// definit les entetes HTTP
-const helmet = require('helmet');
-
-// desinfecte les donnees fournies par l utilisateur
-const mongoSanitize = require('express-mongo-sanitize');
-
-// pour limiter le nombre de tentatives d identifications
-
-const rateLimit = require("express-rate-limit");
-
+// securite
+require('dotenv').config(); //pour definir les variables d environnement 
+const helmet = require('helmet'); //definit les entetes HTTP
+const mongoSanitize = require('express-mongo-sanitize'); //desinfecte donnees fournies par user
+const rateLimit = require("express-rate-limit"); //pour limiter tentative d identifications
 
 //connection à la BDD
 mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.y0gkn.mongodb.net/${process.env.DB_LINK}`,
@@ -33,8 +23,6 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASS
 .catch(() => console.log('Connexion à MongoDB échouée et ZUT DE REZUT!!!'));
 
 
-const app = express();
-
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
@@ -42,20 +30,20 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(bodyParser.json());
+app.use(express.urlencoded({extended: true})); //remplace bodyParser.json() deprecié depuis 2014
+app.use(express.json());
 
-app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/images', express.static(path.join(__dirname, 'images'))); //creation d un middleware qui va repondre aux requetes envoyées à /images
 
-app.use('/api/sauces', sauceRoutes);
+app.use('/api/sauces', sauceRoutes); //on enregistre les routeurs importés ligne 7
 app.use('/api/auth', userRoutes);
 
 //SECURITE
 app.use(helmet());
 
-// por toutes les requetes
-const limiter = rateLimit({
+const limiter = rateLimit({ // pour toutes les requetes
   windowMs: 60 * 1000, // 1 minute
-  max: 3 // limit each IP to 3 requests per windowMs
+  max: 3 //3 requetes max par minute
 });
 app.use(limiter);
 
@@ -64,6 +52,7 @@ app.use(mongoSanitize({
   replaceWith: '_'
 }))
 
+module.exports = app;
 
 
 // //options de securité des cookies
@@ -82,5 +71,3 @@ app.use(mongoSanitize({
 //           }
 //   })
 // );
-
-module.exports = app;
