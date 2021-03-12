@@ -6,6 +6,8 @@ const MIME_TYPES = {
   'image/jpeg': 'jpg',
   'image/png': 'png'
 };
+//taille maximum de l image 
+const maxSize = 1 * 1024 * 1024 //1MB
 
 //creation d un objet de configuration 
 const storage = multer.diskStorage({ //methode qui enregistre sur le disque 
@@ -16,7 +18,12 @@ const storage = multer.diskStorage({ //methode qui enregistre sur le disque
         const name = file.originalname.split(' ').join('_'); //on enleve les espaces
         const extension = MIME_TYPES[file.mimetype];
         callback(null, name + Date.now() + '.' + extension);//nom de fichier suffisamment unique
-  }
-});
+  },
+})
 
-module.exports = multer({storage: storage}).single('image');
+module.exports = multer({
+    storage: storage, 
+    limits: { 
+        fileSize: maxSize 
+    }
+}).single('image');
