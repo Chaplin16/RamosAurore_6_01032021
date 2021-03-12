@@ -13,7 +13,7 @@ const sauceSchema = mongoose.Schema({ // on utilise la méthode Schema de Mongoo
         maxlength: [30, "pas plus de 30 caractères"],
         validate: {
             validator: function(value){
-                return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
+                return /^[^@&"<>!_$*€£`+=\/';?#]+$/.test(value);
             },
             message: "N'entrez que des lettres et des chiffres, svp"
         }   
@@ -24,7 +24,7 @@ const sauceSchema = mongoose.Schema({ // on utilise la méthode Schema de Mongoo
         maxlength: [50, "pas plus de 50 caractères"],
         validate: {
             validator: function(value){
-                return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
+                return /^[^@&"<>!_$*€£`'+=\/;?#]+$/.test(value);
             },
             message: "N'entrez que des lettres et des chiffres, svp"
         }
@@ -35,7 +35,7 @@ const sauceSchema = mongoose.Schema({ // on utilise la méthode Schema de Mongoo
         maxlength: [100, "pas plus de 100 caractères"],
         validate: {
             validator: function(value){
-                return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
+                return /^[^@&"<>!_$*€£`+'=\/;?#]+$/.test(value);
             },
             message: "N'entrez que des lettres et des chiffres, svp"
         }
@@ -46,7 +46,7 @@ const sauceSchema = mongoose.Schema({ // on utilise la méthode Schema de Mongoo
         maxlength: [30, "pas plus de 30 caractères"],
         validate: {
             validator: function(value){
-                return /^[^@&"<>!_$*€£`+=\/;?#]+$/.test(value);
+                return /^[^@&"<>!_$*€£`'+=\/;?#]+$/.test(value);
             },
             message: "N'entrez que des lettres et des chiffres, svp"
         }

@@ -58,7 +58,7 @@ exports.login = (req, res, next) => {
                     res.status(200).json({
                         userId: user._id,
                         token: jsonwebtoken.sign( //fonction sign prend en argument
-                            { userId: user._id }, //1 argument : les données que l on veut encoder à l int de ce token  /  user id etant l identifiant de la requete 
+                            { userId: user._id }, //1 argument : les données que l on veut encoder à l int de ce token
                             `${process.env.TOP_SECRET}`, // 2ieme argument : clef secrete de l encodage 
                             { expiresIn: '24h' } // chq TOKEN dure 24h 
                         )
