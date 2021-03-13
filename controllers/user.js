@@ -1,8 +1,10 @@
+const User = require('../models/User');
+//securité
 const bcrypt = require('bcrypt'); 
 const jsonwebtoken = require('jsonwebtoken'); //creation de token et verification
 const maskData = require('maskdata'); //masque email dans BDD
 const passwordValidator = require('password-validator');
-const User = require('../models/User');
+
 
 //creation du schema
 let schema = new passwordValidator();
@@ -38,7 +40,7 @@ exports.signup = (req, res, next) => {
 
 // connections des utilisateurs deja existants
 exports.login = (req, res, next) => {
-    User.findOne({ email: maskData.maskEmail2(req.body.email)}) //on trouve le user ds la BDD qui correspond à ladresse email qui est rentré par l utilisateur de l application
+    User.findOne({ email: maskData.maskEmail2(req.body.email)}) //on trouve le user ds la BDD qui correspond à l'adresse mail qui est rentrée par l utilisateur de l application
         .then(user => {
             if (!user) {
                 return res.status(401).json({ error: "Il n y a pas d'utilisateur avec ce mail!" });

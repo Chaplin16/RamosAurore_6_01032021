@@ -6,7 +6,7 @@ const MIME_TYPES = {
   'image/jpeg': 'jpg',
   'image/png': 'png'
 };
-//taille maximum de l image 
+//taille maximum de l image téléchargé par user
 const maxSize = 1 * 1024 * 1024 //1MB
 
 //creation d un objet de configuration 

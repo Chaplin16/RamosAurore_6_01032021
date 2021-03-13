@@ -2,8 +2,8 @@ const Sauce = require('../models/Sauce');
 const firesystem = require('fs');
 
 exports.createSauce = (req, res, next) => {
-    const sauceObject = JSON.parse(req.body.sauce); // on parse la chaine en caractère en objet
-    delete sauceObject._id;
+    const sauceObject = JSON.parse(req.body.sauce); // on parse la chaine de caractère en objet
+    delete sauceObject._id;//l 'id est généré par mongoDB = suppression de celui du front
     const sauce = new Sauce({
         ...sauceObject, //operateur spread pour faire une copie de ts les elements envoyes du front end
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`, //on recree un url
