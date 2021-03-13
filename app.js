@@ -1,4 +1,5 @@
 const express = require('express');
+
 const mongoose = require('mongoose');
 const app = express();
 const path = require('path'); //donne acces au chemin de notre systeme de fichier
@@ -11,7 +12,15 @@ const userRoutes = require('./routes/user');
 require('dotenv').config(); //pour definir les variables d environnement 
 const helmet = require('helmet'); //definit les entetes HTTP
 const mongoSanitize = require('express-mongo-sanitize'); //desinfecte donnees fournies par user
-const rateLimit = require("express-rate-limit"); //pour limiter tentative d identifications
+const rateLimit = require('express-rate-limit'); //pour limiter tentative d identifications
+const Ddos = require('ddos');
+const ddos = new Ddos({
+    burst:10, //burst : minuterie d expiration
+    limit:15, //limit: regit le refus reél
+    testmode:false
+});  
+app.use(ddos.express);
+
 
 //connection à la BDD
 mongoose.connect(`mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTER}.y0gkn.mongodb.net/${process.env.DB_LINK}`,
@@ -51,6 +60,7 @@ app.use(mongoSanitize());
 app.use(mongoSanitize({
   replaceWith: '_'
 }))
+
 
 module.exports = app; //devient accessible pour les autres fichiers
 
