@@ -14,8 +14,21 @@ exports.createSauce = (req, res, next) => {
 };
 
 exports.modifySauce = (req, res, next) => {
+    if(req.file) {
+        Sauce.findOne({ _id: req.params.id })
+        .then(sauce => {
+            const filename = sauce.imageUrl.split('/images/')[1];
+            firesystem.unlink(`images/${filename}`, (error => {
+                if(error) 
+                    {console.log(error)}
+                else {
+                    console.log("image effacée");
+                }
+            })) 
+        })
+    };
     const sauceObject = req.file ?
-        {
+        {   
             ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : { ...req.body };
